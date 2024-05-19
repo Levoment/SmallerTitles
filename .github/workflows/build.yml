@@ -39,23 +39,17 @@ jobs:
         id: set-mod-archive-base-name
         run: echo "::set-output name=ARCHIVE_BASENAME::$(grep 'archives_base_name' ./gradle.properties | grep -P -o '(?<=\=).*' | sed -e 's/^[ \t]*//')"
       # Create release
-<<<<<<< HEAD
       - run: gh release create "$tag" \
-=======
       - name: Create release post
         run: gh release create "$tag" \
->>>>>>> main
             --repo="$GITHUB_REPOSITORY" \
             --title="${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }} ${{ steps.set-mod-version.outputs.MOD_VERSION }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
-<<<<<<< HEAD
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }} ${{ steps.set-mod-version.outputs.MOD_VERSION }}
-=======
->>>>>>> main
 
       # Create a release. Use the output from steps: set-mod-archive-base-name and set-mod-version for the name of the release
 #      - name : Create release
