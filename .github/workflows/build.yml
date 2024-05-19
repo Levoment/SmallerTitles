@@ -41,7 +41,8 @@ jobs:
       # Create release
       - run: gh release create "$tag" \
       - name: Create release post
-        run: gh release create "$tag" \
+      - run: | 
+          gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
             --title="${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }} ${{ steps.set-mod-version.outputs.MOD_VERSION }}"
         env:
@@ -50,6 +51,9 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }} ${{ steps.set-mod-version.outputs.MOD_VERSION }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref_name }}
 
       # Create a release. Use the output from steps: set-mod-archive-base-name and set-mod-version for the name of the release
 #      - name : Create release
@@ -74,8 +78,8 @@ jobs:
 #          asset_path: ./build/libs/${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }}-${{ steps.set-mod-version.outputs.MOD_VERSION }}.jar
 #          asset_name: ${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }}-${{ steps.set-mod-version.outputs.MOD_VERSION }}.jar
 #          asset_content_type: application/jar
-        run: |
+      -  run: |
           gh release upload ${{ github.ref_name }} ./build/libs/${{ steps.set-mod-archive-base-name.outputs.ARCHIVE_BASENAME }}-${{ steps.set-mod-version.outputs.MOD_VERSION }}.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref_name }}
