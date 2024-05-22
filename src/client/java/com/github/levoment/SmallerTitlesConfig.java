@@ -20,7 +20,7 @@ public class SmallerTitlesConfig {
     public SmallerTitlesConfig() {
     }
 
-    @SuppressWarnings({"TryWithIdenticalCatches", "UnnecessaryBoxing"})
+    @SuppressWarnings("UnnecessaryBoxing")
     public static void createOrReadConfig(Path configFilePath) {
 
         // Default values
@@ -32,8 +32,6 @@ public class SmallerTitlesConfig {
             try (OutputStream outputStream = new FileOutputStream(configFilePath.toFile())) {
                 // Write the defaults
                 properties.store(outputStream, null);
-            } catch (FileNotFoundException e) { // this is basically the same as only catching IOException
-                throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -55,8 +53,6 @@ public class SmallerTitlesConfig {
                 subtitleScaleInY =  Float.valueOf(properties.getProperty("subtitleScaleInY", "0.5"));
                 subtitleScaleInZ =  Float.valueOf(properties.getProperty("subtitleScaleInZ", "0.5"));
                 showSubtitles = Boolean.valueOf(properties.getProperty("showSubtitles", "true"));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -81,15 +77,12 @@ public class SmallerTitlesConfig {
         return properties;
     }
 
-    @SuppressWarnings("TryWithIdenticalCatches")
     public static void saveConfig(Path configFilePath) {
         try (OutputStream outputStream = new FileOutputStream(configFilePath.toFile())) {
             Properties properties = getProperties();
 
             // Write the defaults
             properties.store(outputStream, null);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
